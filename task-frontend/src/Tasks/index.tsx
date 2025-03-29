@@ -1,39 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { api } from '../services/api';
 import { TaskItem } from '../components/TaskItem';
 import { Container, Title, InputRow, Input, Button } from './styles';
 import { Task } from '../types/task';
+import { addTask, deleteTask, editTaskTitle, loadTasks, toggleTask } from './task_actions';
 
 const Tasks: React.FC = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [title, setTitle] = useState('');
 
-    const loadTasks = async () => {
-        const res = await api.get('/tasks');
-        setTasks(res.data);
-    };
-
-    const addTask = async () => {
-        if (!title.trim()) return;
-        const res = await api.post('/tasks', { title });
-        setTasks(prev => [...prev, res.data]);
-        setTitle('');
-    };
-
-    const toggleTask = async (id: number, completed: boolean) => {
-        await api.put(`/tasks/${id}`, { completed });
-        setTasks(prev =>
-            prev.map(task => (task.id === id ? { ...task, completed } : task))
-        );
-    };
-
-    const deleteTask = async (id: number) => {
-        await api.delete(`/tasks/${id}`);
-        setTasks(prev => prev.filter(task => task.id !== id));
-    };
-
     useEffect(() => {
-        loadTasks();
+        loadTasks(tasks => setTasks(tasks));
     }, []);
 
     return (
@@ -45,15 +21,16 @@ const Tasks: React.FC = () => {
                     onChange={e => setTitle(e.target.value)}
                     placeholder="Nova tarefa"
                 />
-                <Button onClick={addTask}>Adicionar</Button>
+                <Button onClick={() => addTask(title, setTasks, setTitle)}>Adicionar</Button>
             </InputRow>
 
             {tasks.map(task => (
                 <TaskItem
                     key={task.id}
                     task={task}
-                    onToggle={toggleTask}
-                    onDelete={deleteTask}
+                    onToggle={(id, completed) => toggleTask(id, completed, setTasks)}
+                    onDelete={(id) => deleteTask(id, setTasks)}
+                    onEdit={(id, newTitle) => editTaskTitle(id, newTitle, setTasks)}
                 />
             ))}
         </Container>
