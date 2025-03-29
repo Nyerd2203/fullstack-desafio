@@ -59,3 +59,34 @@ Para destacar ainda mais sua solução, considere implementar:
 - Faça um fork deste repositório.
 - Implemente sua solução no repositório forkado.
 - Envie o link do repositório para o avaliador.
+
+
+## Como Rodar a Aplicação
+
+### Backend (API)
+1. Navegue até a pasta `api`:
+    ```bash
+    cd api
+    ```
+2. Instale as dependências:
+    ```bash
+    npm install
+    ```
+3. Inicie o servidor:
+    ```bash
+    npm run dev
+    ```
+
+### Frontend (Task Frontend)
+1. Navegue até a pasta `task-frontend`:
+    ```bash
+    cd task-frontend
+    ```
+2. Instale as dependências:
+    ```bash
+    npm install
+    ```
+3. Inicie a aplicação:
+    ```bash
+    npm run dev
+    ```
